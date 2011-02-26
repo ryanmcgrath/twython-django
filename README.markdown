@@ -39,11 +39,11 @@ settings.py file. If you wish to use the example template, feel free to copy tha
 
 After you've done that, specify the following urlconf in your root urls.py:
 
-    (r'^your_url_extension/', include('your_app.django_twitter_oauth.urls')),
+    (r'^your_url_extension/', include('your_app.twython_django_oauth.urls')),
 
 If you're using this app bare-bones (i.e, just starting out), add the following to your settings.py:
 
-    AUTH_PROFILE_MODULE = 'django_twitter_oauth.Profile'
+    AUTH_PROFILE_MODULE = 'twython_django_oauth.Profile'
  
 (Obviously, if you've got your own custom User/Profile setup going, this should all be pretty self explanatory
 to integrate into your application. The OAuth handshake flow is well documented here, as well as how to use it

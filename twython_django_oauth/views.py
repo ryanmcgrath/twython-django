@@ -8,7 +8,7 @@ from twython import Twython
 
 # If you've got your own Profile setup, see the note in the models file
 # about adapting this to your own setup.
-from your_app.twitter.models import Profile
+from your_app.twython_django_oauth.models import Profile
 
 # Move these into your settings.py if you're feeling adventurous.
 CONSUMER_KEY = "YOUR CONSUMER KEY HERE"

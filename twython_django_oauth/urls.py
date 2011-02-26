@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 
 # your_app = name of your root djang app.
-urlpatterns = patterns('your_app.django_twitter_oauth.views',
+urlpatterns = patterns('your_app.twython_django_oauth.views',
 	
 	# First leg of the authentication journey...
 	(r'^login/?$', begin_auth),
