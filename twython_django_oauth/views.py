@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout as django_logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -17,8 +17,8 @@ def logout(request, redirect_url=settings.LOGOUT_REDIRECT_URL):
 		Nothing hilariously hidden here, logs a user out. Strip this out if your 
 		application already has hooks to handle this.
 	"""
-	logout(request)
-	return HttpResponseRedirect(request.build_absolute_uri(reverse(redirect_url)))
+	django_logout(request)
+	return HttpResponseRedirect(request.build_absolute_uri(redirect_url))
 
 def begin_auth(request):
 	"""

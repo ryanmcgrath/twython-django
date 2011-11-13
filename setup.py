@@ -17,7 +17,8 @@ setup(
 	include_package_data = True,
 
 	# Package dependencies.
-	install_requires = ['simplejson', 'oauth2', 'httplib2', 'twython'],
+	install_requires = ['simplejson', 'oauth2', 'httplib2', 'twython', 'django'],
+	provides = ['twython_django_oauth'],
 
 	# Metadata for PyPI.
 	author = 'Ryan McGrath',
