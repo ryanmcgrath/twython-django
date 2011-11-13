@@ -3,24 +3,22 @@ from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from django.core.urlresolvers import reverse
 
 from twython import Twython
 
 # If you've got your own Profile setup, see the note in the models file
 # about adapting this to your own setup.
-from your_app.twython_django_oauth.models import Profile
+from twython_django_oauth.models import TwitterProfile
 
-# Move these into your settings.py if you're feeling adventurous.
-CONSUMER_KEY = "YOUR CONSUMER KEY HERE"
-CONSUMER_SECRET = "YOUR CONSUMER SECRET HERE"
-
-def logout(request):
+def logout(request, redirect_url=settings.LOGOUT_REDIRECT_URL):
 	"""
 		Nothing hilariously hidden here, logs a user out. Strip this out if your 
 		application already has hooks to handle this.
 	"""
 	logout(request)
-	return HttpResponseRedirect('/')
+	return HttpResponseRedirect(request.build_absolute_uri(reverse(redirect_url)))
 
 def begin_auth(request):
 	"""
@@ -29,8 +27,9 @@ def begin_auth(request):
 	"""
 	# Instantiate Twython with the first leg of our trip.
 	twitter = Twython(
-		twitter_token = CONSUMER_KEY,
-		twitter_secret = CONSUMER_SECRET
+		twitter_token = settings.TWITTER_KEY,
+		twitter_secret = settings.TWITTER_SECRET,
+		callback_url = request.build_absolute_uri(reverse('twython_django_oauth.views.thanks'))
 	)
 	
 	# Request an authorization url to send the user to...
@@ -40,7 +39,7 @@ def begin_auth(request):
 	request.session['request_token'] = auth_props
 	return HttpResponseRedirect(auth_props['auth_url'])
 
-def thanks(request):
+def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
 	"""
 		A user gets redirected here after hitting Twitter and authorizing your
 		app to use their data. 
@@ -53,10 +52,10 @@ def thanks(request):
 	# Now that we've got the magic tokens back from Twitter, we need to exchange
 	# for permanent ones and store them...
 	twitter = Twython(
-		twitter_token = CONSUMER_KEY,
-		twitter_secret = CONSUMER_SECRET,
+		twitter_token = settings.TWITTER_KEY,
+		twitter_secret = settings.TWITTER_SECRET,
 		oauth_token = request.session['request_token']['oauth_token'],
-		oauth_token_secret = request.session['request_token']['oauth_token_secret']
+		oauth_token_secret = request.session['request_token']['oauth_token_secret'],
 	)
 	
 	# Retrieve the tokens we want...
@@ -68,7 +67,7 @@ def thanks(request):
 	except User.DoesNotExist:
 		# We mock a creation here; no email, password is just the token, etc.
 		user = User.objects.create_user(authorized_tokens['screen_name'], "fjdsfn@jfndjfn.com", authorized_tokens['oauth_token_secret'])
-		profile = Profile()
+		profile = TwitterProfile()
 		profile.user = user
 		profile.oauth_token = authorized_tokens['oauth_token']
 		profile.oauth_secret = authorized_tokens['oauth_token_secret']
@@ -79,17 +78,17 @@ def thanks(request):
 		password = authorized_tokens['oauth_token_secret']
 	)
 	login(request, user)
-	return HttpResponseRedirect('/timeline')
+	return HttpResponseRedirect(redirect_url)
 
 def user_timeline(request):
 	"""
 		An example view with Twython/OAuth hooks/calls to fetch data about the user
 		in question. Pretty self explanatory if you read through it...
 	"""
-	user = request.user.get_profile()
+	user = request.user.twitterprofile
 	twitter = Twython(
-		twitter_token = CONSUMER_KEY,
-		twitter_secret = CONSUMER_SECRET,
+		twitter_token = settings.TWITTER_KEY,
+		twitter_secret = settings.TWITTER_SECRET,
 		oauth_token = user.oauth_token,
 		oauth_token_secret = user.oauth_secret
 	)

@@ -1,13 +1,13 @@
 from django.conf.urls.defaults import *
 
 # your_app = name of your root djang app.
-urlpatterns = patterns('your_app.twython_django_oauth.views',
+urlpatterns = patterns('twython_django_oauth.views',
 	
 	# First leg of the authentication journey...
 	(r'^login/?$', "begin_auth"),
 
 	# Logout, if need be
-	(r'^/logout?$', "logout"), # Calling logout and what not
+	(r'^logout/?$', "logout"), # Calling logout and what not
 	
 	# This is where they're redirected to after authorizing - we'll
 	# further (silently) redirect them again here after storing tokens and such.
