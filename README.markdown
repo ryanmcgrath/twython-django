@@ -50,8 +50,9 @@ TWITTER_KEY = 'your_key'
 TWITTER_SECRET = 'your_secret'
 
 LOGIN_URL='/your_url_extension/login'
-LOGIN_REDIRECT_URL='/'
 LOGOUT_URL='/your_url_extension/logout'
+
+LOGIN_REDIRECT_URL='/'
 LOGOUT_REDIRECT_URL='/'
 
 Restart your Django app, and it should all work auto-magically. Build onwards from here if you're
