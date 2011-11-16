@@ -34,20 +34,29 @@ Twython also requires the (most excellent) OAuth2 library for handling OAuth tok
 
 Installation
 -----------------------------------------------------------------------------------------------------
-Copy the "twython_django_oauth" app into your project, and add it to your "INSTALLED_APPS" in your
-settings.py file. If you wish to use the example template, feel free to copy that over as well.
+
+pip install git+http://github.com/zandeez/twython-django.git
+
+Add "twython_django_oauth" to your "INSTALLED_APPS" in your settings.py file. If you wish to use the example
+template, feel free to copy that over as well.
 
 After you've done that, specify the following urlconf in your root urls.py:
 
-    (r'^your_url_extension/', include('your_app.twython_django_oauth.urls')),
+    (r'^your_url_extension/', include('twython_django_oauth.urls')),
+	
+Add the following settings to settings.py:
 
-If you're using this app bare-bones (i.e, just starting out), add the following to your settings.py:
+TWITTER_KEY = 'your_key'
 
-    AUTH_PROFILE_MODULE = 'twython_django_oauth.Profile'
- 
-(Obviously, if you've got your own custom User/Profile setup going, this should all be pretty self explanatory
-to integrate into your application. The OAuth handshake flow is well documented here, as well as how to use it
-with Twython calls.)
+TWITTER_SECRET = 'your_secret'
+
+LOGIN_URL='/your_url_extension/login'
+
+LOGOUT_URL='/your_url_extension/logout'
+
+LOGIN_REDIRECT_URL='/'
+
+LOGOUT_REDIRECT_URL='/'
 
 Restart your Django app, and it should all work auto-magically. Build onwards from here if you're
 just starting out, or integrate this into your existing model setup if you're already Django-savvy.
