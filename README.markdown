@@ -35,7 +35,7 @@ Twython also requires the (most excellent) OAuth2 library for handling OAuth tok
 Installation
 -----------------------------------------------------------------------------------------------------
 
-pip install git+http://github.com/zandeez/twython-django.git
+pip install git+http://github.com/ryanmcgrath/twython-django.git
 
 Add "twython_django_oauth" to your "INSTALLED_APPS" in your settings.py file. If you wish to use the example
 template, feel free to copy that over as well.
