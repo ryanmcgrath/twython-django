@@ -1,8 +1,7 @@
 from django.contrib.auth import authenticate, login, logout as django_logout
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
-from django.contrib.auth.decorators import login_required
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
@@ -12,9 +11,10 @@ from twython import Twython
 # about adapting this to your own setup.
 from twython_django_oauth.models import TwitterProfile
 
+
 def logout(request, redirect_url=settings.LOGOUT_REDIRECT_URL):
 	"""
-		Nothing hilariously hidden here, logs a user out. Strip this out if your 
+		Nothing hilariously hidden here, logs a user out. Strip this out if your
 		application already has hooks to handle this.
 	"""
 	django_logout(request)
@@ -31,10 +31,10 @@ def begin_auth(request):
 		twitter_secret = settings.TWITTER_SECRET,
 		callback_url = request.build_absolute_uri(reverse('twython_django_oauth.views.thanks'))
 	)
-	
+
 	# Request an authorization url to send the user to...
 	auth_props = twitter.get_authentication_tokens()
-	
+
 	# Then send them over there, durh.
 	request.session['request_token'] = auth_props
 	return HttpResponseRedirect(auth_props['auth_url'])
@@ -42,8 +42,8 @@ def begin_auth(request):
 def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
 	"""
 		A user gets redirected here after hitting Twitter and authorizing your
-		app to use their data. 
-		
+		app to use their data.
+
 		***
 			This is the view that stores the tokens you want
 			for querying data. Pay attention to this.
@@ -57,10 +57,11 @@ def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
 		oauth_token = request.session['request_token']['oauth_token'],
 		oauth_token_secret = request.session['request_token']['oauth_token_secret'],
 	)
-	
+
 	# Retrieve the tokens we want...
-	authorized_tokens = twitter.get_authorized_tokens()
-	
+	authorized_tokens = twitter.get_authorized_tokens(
+		request.session['request_token']['oauth_verifier'])
+
 	# If they already exist, grab them, login and redirect to a page displaying stuff.
 	try:
 		user = User.objects.get(username = authorized_tokens['screen_name'])
@@ -72,7 +73,7 @@ def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
 		profile.oauth_token = authorized_tokens['oauth_token']
 		profile.oauth_secret = authorized_tokens['oauth_token_secret']
 		profile.save()
-	
+
 	user = authenticate(
 		username = authorized_tokens['screen_name'],
 		password = authorized_tokens['oauth_token_secret']
