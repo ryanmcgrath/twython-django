@@ -37,7 +37,6 @@ def begin_auth(request):
 
 	# Then send them over there, durh.
 	request.session['request_token'] = auth_props
-	request.session['request_verifier'] = request.GET.get('oauth_verifier', None)
 	return HttpResponseRedirect(auth_props['auth_url'])
 
 def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
@@ -60,8 +59,7 @@ def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
 	)
 
 	# Retrieve the tokens we want...
-	authorized_tokens = twitter.get_authorized_tokens(
-		request.session['request_verifier'])
+	authorized_tokens = twitter.get_authorized_tokens(request.GET['oauth_verifier'])
 
 	# If they already exist, grab them, login and redirect to a page displaying stuff.
 	try:
