@@ -1,11 +1,10 @@
 #!/usr/bin/python
 
-import sys, os
 from setuptools import setup
 from setuptools import find_packages
 
 __author__ = 'Ryan McGrath <ryan@venodesigns.net>'
-__version__ = '1.4.5'
+__version__ = '1.4.6'
 
 setup(
 	# Basic package information.
@@ -17,7 +16,11 @@ setup(
 	include_package_data = True,
 
 	# Package dependencies.
-	install_requires = ['simplejson', 'oauth2', 'httplib2', 'twython', 'django'],
+	install_requires = ['simplejson',
+                        'oauth2',
+                        'httplib2',
+                        'twython>=2.7.2',
+                        'django'],
 	provides = ['twython_django_oauth'],
 
 	# Metadata for PyPI.
