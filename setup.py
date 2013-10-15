@@ -1,15 +1,22 @@
-#!/usr/bin/python
+#!/usr/bin/env python
+
+import os
+import sys
 
 from setuptools import setup
 from setuptools import find_packages
 
 __author__ = 'Ryan McGrath <ryan@venodesigns.net>'
-__version__ = '1.5.0'
+__version__ = '1.5.1'
+
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    sys.exit()
 
 setup(
     name='twython-django',
     version=__version__,
-    install_requires=['twython>=3.0.0', 'django'],
+    install_requires=['twython>=3.1.0', 'django'],
     author='Ryan McGrath',
     author_email='ryan@venodesigns.net',
     license=open('LICENSE').read(),
