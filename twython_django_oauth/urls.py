@@ -1,4 +1,8 @@
-from django.conf.urls.defaults import *
+try:
+    #fix for django 1.6. django.conf.urls.defaults has been removed.
+    from django.conf.urls import *
+except:
+    from django.conf.urls.defaults import *
 
 # your_app = name of your root djang app.
 urlpatterns = patterns('twython_django_oauth.views',
