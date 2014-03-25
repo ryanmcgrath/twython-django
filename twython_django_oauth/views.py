@@ -1,11 +1,14 @@
 from django.contrib.auth import authenticate, login, logout as django_logout
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
 from twython import Twython
+
+User = get_user_model()
+
 
 # If you've got your own Profile setup, see the note in the models file
 # about adapting this to your own setup.
