@@ -38,8 +38,9 @@ def begin_auth(request):
 
     # Then send them over there, durh.
     request.session['request_token'] = auth_props
-    # request.session["redirect_after_login"] = 
+
     request.session["next_url_login"] = request.GET.get("next",None)
+    
     return HttpResponseRedirect(auth_props['auth_url'])
 
 
