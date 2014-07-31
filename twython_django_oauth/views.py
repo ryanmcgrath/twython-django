@@ -38,6 +38,9 @@ def begin_auth(request):
 
     # Then send them over there, durh.
     request.session['request_token'] = auth_props
+
+    request.session['next_url'] = request.GET.get('next',None)
+    
     return HttpResponseRedirect(auth_props['auth_url'])
 
 
@@ -75,7 +78,10 @@ def thanks(request, redirect_url=settings.LOGIN_REDIRECT_URL):
         password=authorized_tokens['oauth_token_secret']
     )
     login(request, user)
-    return HttpResponseRedirect(redirect_url)
+    redirect_url = request.session.get('next_url', redirect_url)
+
+    HttpResponseRedirect(redirect_url)
+
 
 
 def user_timeline(request):
